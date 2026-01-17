@@ -25,18 +25,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: frontend/host-app/package-lock.json
+          # Cache disabled to prevent corruption issues
           
-      - name: Install dependencies
+      - name: Install dependencies (Clean Slate)
         run: |
           cd frontend/host-app
+          rm -rf node_modules package-lock.json
           npm install
           
       - name: Build
         run: |
           cd frontend/host-app
           npm run build
+          echo "Build Complete. Checking dist folder:"
           ls -la dist
 
           
