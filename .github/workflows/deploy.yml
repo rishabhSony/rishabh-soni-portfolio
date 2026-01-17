@@ -28,18 +28,19 @@ jobs:
           # Cache disabled to prevent corruption issues
           
       - name: Install dependencies (Clean Slate)
+        working-directory: ./frontend/host-app
         run: |
-          cd frontend/host-app
           rm -rf node_modules package-lock.json
-          npm install
+          npm install --legacy-peer-deps
           
       - name: Build
+        working-directory: ./frontend/host-app
+        env:
+          CI: false
         run: |
-          cd frontend/host-app
           npm run build
-          echo "Build Complete. Checking dist folder:"
+          echo "==== BUILD OUTPUT ===="
           ls -la dist
-
           
       - name: Setup Pages
         uses: actions/configure-pages@v4
