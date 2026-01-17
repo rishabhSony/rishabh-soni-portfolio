@@ -1,7 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 const path = require('path');
-const deps = require('./package.json').dependencies;
 
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production';
@@ -10,7 +8,7 @@ module.exports = (env, argv) => {
     : 'http://localhost:3000/';
 
   return {
-    entry: './src/index',
+    entry: './src/index.js',
     mode: isProduction ? 'production' : 'development',
     devServer: {
       static: {
@@ -24,6 +22,7 @@ module.exports = (env, argv) => {
       publicPath: publicPath,
       path: path.resolve(__dirname, 'dist'),
       clean: true,
+      filename: isProduction ? '[name].[contenthash].js' : '[name].js',
     },
     resolve: {
       extensions: ['.jsx', '.js', '.json'],
@@ -45,25 +44,6 @@ module.exports = (env, argv) => {
       ],
     },
     plugins: [
-      new ModuleFederationPlugin({
-        name: 'host',
-        remotes: {
-        },
-        shared: {
-          react: {
-            singleton: true,
-            requiredVersion: deps.react,
-          },
-          'react-dom': {
-            singleton: true,
-            requiredVersion: deps['react-dom'],
-          },
-          'react-router-dom': {
-            singleton: true,
-            requiredVersion: deps['react-router-dom'],
-          },
-        },
-      }),
       new HtmlWebpackPlugin({
         template: './public/index.html',
       }),
