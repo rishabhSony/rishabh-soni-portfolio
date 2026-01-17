@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
+const path = require('path');
 const deps = require('./package.json').dependencies;
 
 module.exports = (env, argv) => {
@@ -9,15 +10,23 @@ module.exports = (env, argv) => {
     : 'http://localhost:3000/';
 
   return {
+    entry: './src/index',
+    mode: isProduction ? 'production' : 'development',
+    devServer: {
+      static: {
+        directory: path.join(__dirname, 'dist'),
+      },
+      port: 3000,
+      historyApiFallback: true,
+      hot: true,
+    },
     output: {
       publicPath: publicPath,
+      path: path.resolve(__dirname, 'dist'),
+      clean: true,
     },
     resolve: {
       extensions: ['.jsx', '.js', '.json'],
-    },
-    devServer: {
-      port: 3000,
-      historyApiFallback: true,
     },
     module: {
       rules: [
