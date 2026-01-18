@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rishabhsony.github.io/rishabh-soni-portfolio/sitemap.xml
